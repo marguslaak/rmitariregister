@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "rmit.fullname" . }}-shared-pvc
+spec:
+  storageClassName: {{ .Values.storage.storageClass | quote }}
+  accessModes:
+    {{- toYaml .Values.storage.accessModes | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.resources.requests.storage }}

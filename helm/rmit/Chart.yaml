@@ -1,0 +1,10 @@
+apiVersion: v2
+name: rmit
+description: RMIT
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+dependencies:
+  - name: redis
+    version: 17.13.2
+    repository: https://charts.bitnami.com/bitnami

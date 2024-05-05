@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "rmit.fullname" . }}-backend-configmap
+data:
+  DEBUG: {{ .Values.deployment.backend.debug | quote }}
+  ALLOWED_HOSTS: {{ .Values.deployment.backend.allowed_hosts | quote }}
+  DATABASE_ENGINE: {{ .Values.deployment.backend.database_engine | quote }}
+  DATABASE_NAME: {{ .Values.deployment.backend.database_name | quote }}
+  DATABASE_HOST: {{ .Values.deployment.backend.database_host | quote }}
+  DATABASE_PORT: {{ .Values.deployment.backend.database_port | quote }}
+  CELERY_BROKER_URL: {{ .Values.deployment.backend.broker_url | quote }}
+  CELERY_RESULT_BACKEND: {{ .Values.deployment.backend.celery_result_backend | quote }}
+  CSRF_TRUSTED_ORIGINS: {{ .Values.deployment.backend.csrf_trusted_origins | quote }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "rmit.fullname" . }}-frontend-configmap
+data: {}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "rmit.fullname" . }}-postgrest-configmap
+data:
+  PGRST_DB_URI: {{ .Values.deployment.postgrest.pgrst_db_uri | quote }}
+  PGRST_DB_SCHEMA: {{ .Values.deployment.postgrest.pgrst_db_schema | quote }}
+  PGRST_DB_ANON_ROLE: {{ .Values.deployment.postgrest.pgrst_db_anon_role | quote }}
+  PGRST_ADMIN_SERVER_PORT: {{ .Values.deployment.postgrest.pgrst_admin_server_port | quote }}

@@ -1,0 +1,24 @@
+image: python:3.11-alpine
+pipelines:
+  branches:
+    main:
+    - step:
+        name: Build Backend Image
+        caches:
+          - docker
+        script:
+          - echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
+          - docker build -t marguslaak/rmit-backend:latest . --compress
+          - docker push marguslaak/rmit-backend:latest
+        services:
+          - docker
+    - step:
+        name: Build Frontend Image
+        caches:
+          - docker
+        script:
+          - echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
+          - docker build --build-arg VITE_API_URL=$VITE_API_URL -t marguslaak/rmit-frontend:latest ./frontend --compress
+          - docker push marguslaak/rmit-frontend:latest
+        services:
+          - docker

@@ -1,0 +1,50 @@
+{{- if .Values.ingressRoute.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "rmit.fullname" . }}-cert
+spec:
+  secretName: {{ include "rmit.fullname" . }}-cert-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+  commonName: {{ .Values.ingressRoute.domain }}
+  dnsNames:
+    - {{ .Values.ingressRoute.domain }}
+    - backend.{{ .Values.ingressRoute.domain }}
+    - frontend.{{ .Values.ingressRoute.domain }}
+    - postgrest.{{ .Values.ingressRoute.domain }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "rmit.fullname" . }}-ingress-route
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`backend.{{ .Values.ingressRoute.domain }}`)
+      priority: 10
+      services:
+        - name: {{ include "rmit.fullname" . }}-backend-svc
+          port: {{ .Values.service.port }}
+    - kind: Rule
+      match: Host(`frontend.{{ .Values.ingressRoute.domain }}`)
+      priority: 10
+      services:
+        - name: {{ include "rmit.fullname" . }}-frontend-svc
+          port: {{ .Values.service.port }}
+    - kind: Rule
+      match: Host(`postgrest.{{ .Values.ingressRoute.domain }}`)
+      priority: 10
+      services:
+        - name: {{ include "rmit.fullname" . }}-postgrest-svc
+          port: {{ .Values.service.port }}
+  {{- if .Values.ingressRoute.tls.enabled }}
+  tls:
+    domains:
+    - main: {{ .Values.ingressRoute.domain }}
+    secretName: {{ include "rmit.fullname" . }}-cert-tls
+  {{- end }}
+{{- end }}

@@ -1,0 +1,15 @@
+.idea/
+.git/
+rawdata/
+workflows/
+frontend/
+helm/
+.env
+.gitignore
+.dockerignore
+docker-compose.yml
+Dockerfile
+testing.ipynb
+initialized.txt
+
+!workflows/keepme

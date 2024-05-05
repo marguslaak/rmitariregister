@@ -1,0 +1,97 @@
+replicaCount: 1
+image:
+  backend:
+    repository: marguslaak/rmit-backend
+    pullPolicy: IfNotPresent
+    tag: latest
+    shasum:
+  frontend:
+    repository: marguslaak/rmit-frontend
+    pullPolicy: IfNotPresent
+    tag: latest
+    shasum:
+  postgrest:
+    repository: postgrest/postgrest
+    pullPolicy: IfNotPresent
+    tag: latest
+imagePullSecrets:
+  - name: "docker-registry-cred"
+deployment:
+  backend:
+    debug: true
+    allowed_hosts: ""
+    database_engine: ""
+    database_name: ""
+    database_user: ""
+    database_password: ""
+    database_host: ""
+    database_port: ""
+    secret_key: "*nk2&u09r%)@(v%j06hnewx^kh7(%-8#dk5l%ba%@0v)7yoe#2"
+    broker_url: ""
+    celery_result_backend: ""
+    csrf_trusted_origins: ""
+  postgrest:
+    pgrst_db_uri: ""
+    pgrst_db_schema: ""
+    pgrst_db_anon_role: ""
+    pgrst_admin_server_port: "3001"
+nameOverride: ""
+fullnameOverride: ""
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+service:
+  type: ClusterIP
+  port: 80
+ingressRoute:
+  enabled: true
+  domain: "rmit.dev.redfunction.ee"
+  tls:
+    enabled: true
+resources: {}
+storage:
+  storageClass: "longhorn"
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: ""
+nodeSelector: {}
+tolerations: []
+affinity: {}
+redis:
+  architecture: standalone
+  auth:
+    enabled: false
+    password: ""
+  master:
+    persistence:
+      enabled: false
+      medium: "Memory"
+      storageClass: "longhorn"
+      accessModes:
+        - ReadWriteOnce
+  replica:
+    persistence:
+      enabled: false
+      medium: "Memory"
+      storageClass: "longhorn"
+      accessModes:
+        - ReadWriteOnce
+  sentinel:
+    persistence:
+      enabled: false
+      medium: "Memory"
+      storageClass: "longhorn"
+      accessModes:
+        - ReadWriteOnce
