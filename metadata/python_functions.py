@@ -147,21 +147,21 @@ def sync_with_postgres(
     del_df = None
     if not add_only:
         query = build_del_select_query()
-        print("Del query select:", query)
+        #print("Del query select:", query)
         del_df = con.query(query).df() # noqa
 
     query = build_add_select_query()
-    print("Add query select:", query)
+    #print("Add query select:", query)
     add_df = con.query(query).df() # noqa
 
     # First we delete the rows that are not present in the parquet file
     if not add_only:
         query = build_del_query(df_name='del_df')
-        print("Del query:", query)
+        #print("Del query:", query)
         con.query(query)
 
     query = build_add_query(df_name='add_df')
-    print("Add query:", query)
+    #print("Add query:", query)
     con.query(query)
 
     if step_execution:
